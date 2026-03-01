@@ -39,14 +39,12 @@ function call(client, method, params) {
     });
 }
 
-// Authenticate once and cache the uid
-let _uid = null;
+// Always authenticate fresh — avoids stale UID when DB changes
 async function getUid() {
-    if (_uid) return _uid;
     const common = makeClient("/xmlrpc/2/common");
-    _uid = await call(common, "authenticate", [ODOO_DB, ODOO_USERNAME, ODOO_API_KEY, {}]);
-    if (!_uid) throw new Error("Odoo authentication failed — check your API key and database name.");
-    return _uid;
+    const uid = await call(common, "authenticate", [ODOO_DB, ODOO_USERNAME, ODOO_API_KEY, {}]);
+    if (!uid) throw new Error("Odoo authentication failed — check your API key and database name.");
+    return uid;
 }
 
 async function execute(model, method, args, kwargs = {}) {
