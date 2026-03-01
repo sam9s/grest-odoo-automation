@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Kanban View (Dashboard) -->
+    <record id="view_accounts_approval_kanban" model="ir.ui.view">
+        <field name="name">grest.accounts.approval.kanban</field>
+        <field name="model">grest.accounts.approval</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="gsn"/>
+                <field name="source_name"/>
+                <field name="total_price"/>
+                <field name="payment_scenario"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <br/>
+                                    <span class="o_kanban_record_subtitle">
+                                        GSN: <field name="gsn"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                Source: <field name="source_name"/>
+                                <br/>
+                                <field name="total_price"/>
+                                <br/>
+                                <field name="payment_scenario"/>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_right">
+                                    <button name="action_approve"
+                                            string="Approve"
+                                            type="object"
+                                            class="btn btn-sm btn-success"
+                                            invisible="state != 'pending'"/>
+                                    <button name="action_reject"
+                                            string="Reject"
+                                            type="object"
+                                            class="btn btn-sm btn-danger"
+                                            invisible="state != 'pending'"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_accounts_approval_form" model="ir.ui.view">
+        <field name="name">grest.accounts.approval.form</field>
+        <field name="model">grest.accounts.approval</field>
+        <field name="arch" type="xml">
+            <form string="Approval">
+                <header>
+                    <button name="action_approve"
+                            string="APPROVE"
+                            type="object"
+                            class="btn-success"
+                            invisible="state != 'pending'"/>
+                    <button name="action_reject"
+                            string="REJECT"
+                            type="object"
+                            class="btn-danger"
+                            invisible="state != 'pending'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group string="Procurement Details (Read-only)">
+                        <group>
+                            <field name="gsn" readonly="1"/>
+                            <field name="imei" readonly="1"/>
+                            <field name="model_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="source_name" readonly="1"/>
+                            <field name="price_offered" readonly="1"/>
+                            <field name="total_price" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Invoice">
+                        <field name="invoice_file" widget="binary"
+                               filename="invoice_filename" readonly="1"/>
+                        <field name="invoice_filename" invisible="1"/>
+                    </group>
+
+                    <group string="Payment Information">
+                        <group>
+                            <field name="payment_scenario" readonly="1"/>
+                            <field name="payment_status"/>
+                            <field name="payment_utr"/>
+                        </group>
+                        <group>
+                            <field name="credit_days"
+                                   invisible="payment_scenario != 'credit'"/>
+                            <field name="partial_amount"
+                                   invisible="payment_scenario != 'partial'"/>
+                        </group>
+                    </group>
+
+                    <group string="Approval Decision">
+                        <group>
+                            <field name="approved_by_id" readonly="1"/>
+                            <field name="approval_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="rejection_reason"
+                                   invisible="state != 'rejected'"/>
+                        </group>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View (Odoo 18: tree → list) -->
+    <record id="view_accounts_approval_list" model="ir.ui.view">
+        <field name="name">grest.accounts.approval.list</field>
+        <field name="model">grest.accounts.approval</field>
+        <field name="arch" type="xml">
+            <list string="Approvals">
+                <field name="name"/>
+                <field name="gsn"/>
+                <field name="source_name"/>
+                <field name="payment_scenario"/>
+                <field name="payment_status"/>
+                <field name="total_price"/>
+                <field name="state"
+                       decoration-warning="state == 'pending'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"/>
+                <field name="approved_by_id"/>
+                <field name="approval_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_accounts_approval_search" model="ir.ui.view">
+        <field name="name">grest.accounts.approval.search</field>
+        <field name="model">grest.accounts.approval</field>
+        <field name="arch" type="xml">
+            <search string="Search Approvals">
+                <field name="gsn"/>
+                <field name="source_name"/>
+                <separator/>
+                <filter name="pending" string="Pending"
+                        domain="[('state','=','pending')]"/>
+                <filter name="approved" string="Approved"
+                        domain="[('state','=','approved')]"/>
+                <filter name="rejected" string="Rejected"
+                        domain="[('state','=','rejected')]"/>
+                <group expand="1" string="Group By">
+                    <filter name="group_state" string="State"
+                            context="{'group_by':'state'}"/>
+                    <filter name="group_scenario" string="Payment Scenario"
+                            context="{'group_by':'payment_scenario'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

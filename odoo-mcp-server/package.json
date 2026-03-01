@@ -1,0 +1,14 @@
+{
+  "name": "odoo-mcp-server",
+  "version": "1.0.0",
+  "description": "Custom stdio MCP server for Odoo 18 integration",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "xmlrpc": "^1.3.2"
+  }
+}

@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp and logs
+temp/
+*.log
+*.zip
+
+# Node.js / MCP server deps
+node_modules/
+npm-debug.log*
+
+# Odoo Docker setup (VPS-specific, not source code)
+odoo-setup/
+
+# Loose files not part of module
+procurement.py
+claude_desk_json/
