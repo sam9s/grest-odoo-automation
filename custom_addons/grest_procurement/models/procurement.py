@@ -77,19 +77,30 @@ class GrestProcurement(models.Model):
         readonly=True
     )
 
-    ram = fields.Char(
-        string='RAM',
-        related='model_id.product_tmpl_id.ram',
-        store=True,
-        readonly=True
-    )
+    ram = fields.Selection([
+        ('0', '0 GB'),
+        ('1', '1 GB'),
+        ('2', '2 GB'),
+        ('3', '3 GB'),
+        ('4', '4 GB'),
+        ('6', '6 GB'),
+        ('8', '8 GB'),
+        ('12', '12 GB'),
+        ('16', '16 GB'),
+        ('na', 'N/A'),
+    ], string='RAM')
 
-    rom = fields.Char(
-        string='ROM',
-        related='model_id.product_tmpl_id.rom',
-        store=True,
-        readonly=True
-    )
+    rom = fields.Selection([
+        ('0', '0 GB'),
+        ('16', '16 GB'),
+        ('32', '32 GB'),
+        ('64', '64 GB'),
+        ('128', '128 GB'),
+        ('256', '256 GB'),
+        ('500', '500 GB'),
+        ('512', '512 GB'),
+        ('na', 'N/A'),
+    ], string='ROM')
 
     # ========== SOURCE INFORMATION ==========
     source_name = fields.Selection([
@@ -101,9 +112,36 @@ class GrestProcurement(models.Model):
         ('other', 'Other'),
     ], string='Source', required=True, index=True)
 
-    store_name = fields.Char(
-        string='Store Name'
-    )
+    store_name = fields.Selection([
+        # Unicorn stores
+        ('uni_cyb', 'UNI_CYB'),
+        ('uni_airiamall', 'Uni_Airiamall'),
+        ('uni_crown', 'Uni_Crown Interiorz'),
+        ('uni_defence', 'Uni_Defence Colony'),
+        # Sangeeta / SMPL stores
+        ('smpl_annanagar', 'SMPL@Annanagar AMI'),
+        ('smpl_batlagundu', 'SMPL@Batlagundu BTA'),
+        ('smpl_boyampalayam', 'SMPL@Boyampalayam TPR4'),
+        # GREST own stores
+        ('grest_mg', 'Grest@MG_BS02'),
+        # Retail distribution partners
+        ('rd_ayodhya', 'RD_Ayodhya TAVD'),
+        ('rd_bmg', 'RD_BMG Mall Rewari 8694'),
+        ('rd_sshigh', 'RD_SSHigh Point T7BJ'),
+        # Independent
+        ('ample_rr', 'Ample_RR Nagar'),
+        ('bhagwati', 'Bhagwati'),
+        ('emobiexpress', 'E-MOBIEXPRESS'),
+        ('future_world', 'Future World'),
+        ('maple', 'Maple'),
+        ('servify', 'Servify'),
+        ('ivenus', 'iVenus'),
+        # Cashify (direct from source)
+        ('cashify_b2b_store', 'Cashify B2B'),
+        ('cashify_trade_in', 'Cashify Trade in'),
+        # Other
+        ('other', 'Other'),
+    ], string='Store Name', index=True)
 
     # ========== PRICING ==========
     price_offered = fields.Float(
@@ -186,9 +224,11 @@ class GrestProcurement(models.Model):
         ('credit', 'Credit Note'),
     ], string='Payment Scenario', required=True, default='paid')
 
-    payment_status = fields.Char(
-        string='Payment Status'
-    )
+    payment_status = fields.Selection([
+        ('paid', 'Paid'),
+        ('not_paid', 'Not Paid'),
+        ('partial', 'Partially Paid'),
+    ], string='Payment Status', default='not_paid', index=True)
 
     payment_date = fields.Date(
         string='Payment Date'
@@ -235,8 +275,37 @@ class GrestProcurement(models.Model):
     )
 
     # ========== STATUS & GRADING ==========
-    grade = fields.Char(string='Grade')
-    els_grade = fields.Char(string='ELS Grade')
+    grade = fields.Selection([
+        ('a_plus', 'A+'),
+        ('a', 'A'),
+        ('a_minus', 'A-'),
+        ('b_plus', 'B+'),
+        ('b', 'B'),
+        ('b_minus', 'B-'),
+        ('c_plus', 'C+'),
+        ('c', 'C'),
+        ('c_minus', 'C-'),
+        ('d_plus', 'D+'),
+        ('d', 'D'),
+        ('d_minus', 'D-'),
+        ('e', 'E'),
+        ('na', 'N/A'),
+    ], string='Grade', index=True)
+    els_grade = fields.Selection([
+        ('a_plus', 'A+'),
+        ('a', 'A'),
+        ('b_plus', 'B+'),
+        ('b', 'B'),
+        ('b_minus', 'B-'),
+        ('c_plus', 'C+'),
+        ('c', 'C'),
+        ('c_minus', 'C-'),
+        ('d_plus', 'D+'),
+        ('d', 'D'),
+        ('e', 'E'),
+        ('p', 'P'),
+        ('na', 'N/A'),
+    ], string='ELS Grade', index=True)
 
     status = fields.Selection([
         ('pending', 'Pending'),
@@ -257,7 +326,11 @@ class GrestProcurement(models.Model):
     )
 
     # ========== COMMISSION PAYMENT ==========
-    commission_payment_status = fields.Char(string='Commission Payment Status')
+    commission_payment_status = fields.Selection([
+        ('paid', 'Paid'),
+        ('not_paid', 'Not Paid'),
+        ('na', 'N/A'),
+    ], string='Commission Payment Status')
     commission_utr = fields.Char(string='Commission UTR')
     commission_paid_date = fields.Date(string='Commission Paid Date')
 
