@@ -54,6 +54,8 @@ class GrestProcurement(models.Model):
         ('laptop', 'Laptop'),
         ('watch', 'Watch'),
         ('airpods', 'Airpods'),
+        ('pencil', 'Pencil'),
+        ('imac', 'iMac'),
     ], string='Category', required=True, index=True)
 
     imei = fields.Char(
@@ -104,10 +106,18 @@ class GrestProcurement(models.Model):
 
     # ========== SOURCE INFORMATION ==========
     source_name = fields.Selection([
-        ('cashify_b2b', 'Cashify B2B'),
-        ('cashify_trading', 'Cashify Trading'),
         ('unicorn', 'Unicorn'),
-        ('sangeeta', 'Sangeeta'),
+        ('sangeetha', 'Sangeetha'),
+        ('cashify', 'Cashify'),
+        ('ample', 'Ample'),
+        ('bhagwati', 'Bhagwati'),
+        ('emobiexpress', 'E-MOBIEXPRESS'),
+        ('future_world', 'Future World'),
+        ('grest', 'Grest'),
+        ('maple', 'Maple'),
+        ('reliance_digital', 'Reliance Digital'),
+        ('servify', 'Servify'),
+        ('ivenus', 'iVenus'),
         ('trade_in', 'Trade-In'),
         ('other', 'Other'),
     ], string='Source', required=True, index=True)
@@ -246,10 +256,15 @@ class GrestProcurement(models.Model):
     )
 
     # ========== RECEIVING ==========
-    grest_received = fields.Boolean(
-        string='GREST Received',
-        default=False
-    )
+    grest_received = fields.Selection([
+        ('yes', 'Yes — Received'),
+        ('rec', 'Rec'),
+        ('intransit', 'In Transit'),
+        ('dn', 'DN'),
+        ('cancel', 'Cancel'),
+        ('disputed', 'Disputed'),
+        ('dispute_settled', 'Dispute Settled'),
+    ], string='GREST Received', index=True)
 
     receiving_date = fields.Date(
         string='Receiving Date'
