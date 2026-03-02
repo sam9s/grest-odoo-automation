@@ -40,10 +40,9 @@ class GrestProcurement(models.Model):
     )
 
     technician_id = fields.Many2one(
-        'res.users',
+        'grest.technician',
         string='Technician',
         required=True,
-        default=lambda self: self.env.user,
         index=True
     )
 
@@ -74,9 +73,8 @@ class GrestProcurement(models.Model):
 
     brand = fields.Char(
         string='Brand',
-        related='model_id.product_tmpl_id.brand',
-        store=True,
-        readonly=True
+        index=True,
+        help='Device brand/manufacturer (e.g., Apple, Samsung, OnePlus)'
     )
 
     ram = fields.Selection([

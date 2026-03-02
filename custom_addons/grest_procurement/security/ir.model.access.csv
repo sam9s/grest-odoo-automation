@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_procurement_user,procurement.user,model_grest_procurement,group_procurement_user,1,1,1,0
 access_procurement_manager,procurement.manager,model_grest_procurement,group_procurement_manager,1,1,1,1
+access_technician_base,technician.base,model_grest_technician,,1,1,1,0
+access_technician_manager,technician.manager,model_grest_technician,group_procurement_manager,1,1,1,1
